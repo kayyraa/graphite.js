@@ -10,15 +10,14 @@
 
 ## Installation
 ```bash
-git clone https://github.com/yourusername/graphite.js.git
+git clone https://github.com/kayyraa/graphite.js.git
 ```
-## Or include it directly:
 ```html
-<script type="module" src="https://raw.githubusercontent.com/kayyraa/graphite.js/refs/heads/main/graphite.js"></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/kayyraa/graphite.js@main/graphite.js"></script>
 ```
 ## Example usage
 ```js
-new Graph(
+const GraphObject = new Graph(
     document.querySelector(".Canvas"),
     "Line",
     [[-1, -1], [1, 1]],
@@ -40,6 +39,54 @@ new Graph(
     }
 ).Update();
 
-Graph.Update();
+GraphObject.Update();
+GraphObject.Resize([window.innerWidth / 2, window.innerHeight / 2]); // [SizeX, SizeY] + Update()
+```
+## Example usage of TweenService
+```js
+const GraphObject = new Graph(
+    document.querySelector(".Canvas"),
+    "Line",
+    [[0, 0], [1, 1]],
+    {},
+    {
+        AxisXmn: 0,
+        AxisXmx: 1,
+        AxisYmn: 0,
+        AxisYmx: 1,
+        Style: {
+            MasterColor: "rgb(0, 0, 0)",
+            LineThickness: 2,
+            DotThickness: 2
+        }
+    }
+);
 
+let Size = [window.innerWidth / 2, window.innerHeight / 2];
+let Scale = { Value: 1 };
+let TargetScale = 0.825;
+
+function Loop() {
+    Size[0] = (window.innerWidth / 2) * Scale.Value;
+    Size[1] = (window.innerHeight / 2) * Scale.Value;
+    GraphObject.Resize(Size);
+    requestAnimationFrame(Loop);
+}
+
+function Animate() {
+    TweenService.Tween(
+        Scale,                         // Object
+        "Value",                       // Property
+        TargetScale,                   // Target value
+        500,                           // Time
+        TweenService.Easing.SineInOut, // Timing function
+        () => {
+            TargetScale = TargetScale === 0.825 ? 1 : 0.825;
+            Animate();                 // Loops infinitely
+        }                              // OnComplete function
+    );
+}
+
+Loop();
+Animate();
 ```
