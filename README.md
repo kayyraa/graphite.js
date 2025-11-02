@@ -14,7 +14,7 @@ git clone https://github.com/yourusername/graphite.js.git
 ```
 ## Or include it directly:
 ```html
-<script type="module" src="graphite.js"></script>
+<script type="module" src="https://raw.githubusercontent.com/kayyraa/graphite.js/refs/heads/main/graphite.js"></script>
 ```
 ## Example usage
 ```js
