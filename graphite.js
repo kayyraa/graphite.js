@@ -266,4 +266,56 @@ globalThis.Graph = class {
             Ctx.stroke();
         }
     }
+
+    Resize(Size = [window.innerWidth, window.innerHeight]) {
+        this.Canvas.setAttribute("width", Size[0]);
+        this.Canvas.setAttribute("height", Size[1]);
+        this.Update();
+        return this;
+    }
 };
+
+globalThis.TweenService = class {
+    static Tween(Object, Property, TargetValue, Duration = 1000, Ease = Time => Time, OnComplete = null) {
+        let StartTime = performance.now();
+        let StartValue = Object[Property];
+        let Change = TargetValue - StartValue;
+
+        function Step(Time) {
+            let Elapsed = Time - StartTime;
+            let Alpha = Math.min(Elapsed / Duration, 1);
+            Object[Property] = StartValue + Change * Ease(Alpha);
+            if (Alpha < 1) requestAnimationFrame(Step);
+            else if (OnComplete) OnComplete();
+        }
+
+        requestAnimationFrame(Step);
+    }
+
+    static Easing = {
+        Linear: Time => Time,
+        SineInOut: Time => 0.5 - Math.cos(Time * Math.PI) / 2,
+        QuadIn: Time => Time * Time,
+        QuadOut: Time => Time * (2 - Time),
+        QuadInOut: Time => Time < 0.5 ? 2 * Time * Time : -1 + (4 - 2 * Time) * Time,
+        CubicInOut: Time => Time < 0.5 ? 4 * Time * Time * Time : (Time - 1) * (2 * Time - 2) * (2 * Time - 2) + 1
+    };
+};
+
+new Graph(
+    document.querySelector(".Canvas"),
+    "Line",
+    [[0, 0], [1, 1]],
+    {},
+    {
+        AxisXmn: 0,
+        AxisXmx: 1,
+        AxisYmn: 0,
+        AxisYmx: 1,
+        Style: {
+            MasterColor: "rgb(0, 0, 0)",
+            LineThickness: 2,
+            DotThickness: 2
+        }
+    }
+).Resize([window.innerWidth / 2,window.innerHeight / 2]);
