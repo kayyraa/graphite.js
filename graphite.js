@@ -301,21 +301,3 @@ globalThis.TweenService = class {
         CubicInOut: Time => Time < 0.5 ? 4 * Time * Time * Time : (Time - 1) * (2 * Time - 2) * (2 * Time - 2) + 1
     };
 };
-
-new Graph(
-    document.querySelector(".Canvas"),
-    "Line",
-    [[0, 0], [1, 1]],
-    {},
-    {
-        AxisXmn: 0,
-        AxisXmx: 1,
-        AxisYmn: 0,
-        AxisYmx: 1,
-        Style: {
-            MasterColor: "rgb(0, 0, 0)",
-            LineThickness: 2,
-            DotThickness: 2
-        }
-    }
-).Resize([window.innerWidth / 2,window.innerHeight / 2]);
